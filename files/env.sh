@@ -18,11 +18,29 @@ sudo debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $
 sudo debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
 sudo apt-get -y install phpmyadmin
 
+# copy config with updated options
+sudo cp /vagrant/files/apache/default /etc/apache2/sites-available/default
 
-sudo cp /vagrant/files/apache/default /etc/apache2/sites-enabled/default
+# enable permalinks
+sudo ln -sfn /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/
 
 sudo service apache2 restart
 
 mysql -u root --password="$PASSWORD" < /vagrant/files/mysql_setup.sql;
 
-mysql -u root --password="$PASSWORD" wordpress < /vagrant/files/import/daily-backup*;
+if [ "$(ls -A /vagrant/files/import)" ]; then
+	mysql -u root --password="$PASSWORD" wordpress < /vagrant/files/import/daily-backup*;
+fi
+
+#install node
+apt-get install -y curl git-core
+curl -sL https://deb.nodesource.com/setup | sudo bash -;
+
+sudo apt-get install -y nodejs;
+sudo echo "192.168.33.10   localtest.extole.com" >> /etc/hosts
+sudo npm install -g bower grunt grunt-cli
+
+cd /var/www/wp-content/themes/extole;
+
+npm install; bower install;
+
