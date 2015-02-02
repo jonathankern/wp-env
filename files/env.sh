@@ -28,9 +28,9 @@ sudo service apache2 restart
 
 mysql -u root --password="$PASSWORD" < /vagrant/files/mysql_setup.sql;
 
-if [ "$(ls -A /vagrant/files/import)" ]; then
-	mysql -u root --password="$PASSWORD" wordpress < /vagrant/files/import/daily-backup*;
-fi
+echo "Updating bashrc.."
+
+echo 'export PATH=$PATH:/vagrant/files/bin' >> /home/vagrant/.bashrc
 
 #install node
 apt-get install -y curl git-core
