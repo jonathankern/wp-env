@@ -9,6 +9,7 @@ sudo debconf-set-selections <<< "mysql-server mysql-server/root_password passwor
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $PASSWORD"
 
 sudo apt-get install -y lamp-server^
+sudo apt-get install -y php5-curl
 
 # install phpmyadmin and give password(s) to installer
 sudo debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
